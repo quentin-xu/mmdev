@@ -4,6 +4,8 @@ package solproxy;
 
 service SolProxy {
   rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc SubmitTransaction (SubmitTransactionRequest) returns (TransactionResponse) {}
+  rpc GetTransaction (GetTransactionRequest) returns (TransactionResponse) {}
 }
 
 message HelloRequest {
@@ -12,4 +14,18 @@ message HelloRequest {
 
 message HelloReply {
   string message = 1;
+}
+
+message SubmitTransactionRequest {
+  string reciever = 1;
+  uint64 amount = 3;
+}
+
+message GetTransactionRequest {
+  string signature = 2;
+}
+
+
+message TransactionResponse {
+  string signature = 1;
 }
