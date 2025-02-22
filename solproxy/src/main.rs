@@ -8,6 +8,7 @@ pub mod solproxy {
 }
 
 pub mod client;
+pub mod transaction;
 
 #[derive(Debug, Default)]
 pub struct MySolProxy {
@@ -44,11 +45,11 @@ impl SolProxy for MySolProxy {
         request: Request<GetTransactionRequest>,
     ) -> Result<Response<TransactionResponse>, Status> {
         let msg = request.into_inner();
-        let transaction = self.client.get_transaction(&msg.signature).map_err(|e| {
+        let tx = self.client.get_transaction(&msg.signature).map_err(|e| {
             Status::internal(format!("Failed to get transaction: {}", e))
         })?;
         Ok(Response::new(TransactionResponse {
-            signature: transaction.signatures[0].to_string(),
+            signature: transaction::get_signature(&tx)[0].clone()
         }))
     }
 }
@@ -57,7 +58,6 @@ impl SolProxy for MySolProxy {
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let addr = "[::1]:50051".parse()?;
     let proxy = MySolProxy::default();
-
 
     println!("SolProxyServer listening on {}", addr);
 

@@ -11,11 +11,16 @@ tokio = { version = "1.0", features = ["full"] }
 solana-sdk = "1.16"
 solana-client = "1.16"
 solana-transaction-status = "1.16"
+solana-program = "1.16"
+solana-transaction = "2.2"
 
 mockito = "1.6.1"
 serde_json = "1.0.138"
 dotenv = "0.15.0"
 hex = "0.4.3"
+
+base64 = "0.22"
+bs58 = "0.5"
 
 [build-dependencies]
 tonic-build = "0.9"

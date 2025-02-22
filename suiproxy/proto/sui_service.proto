@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package sui;
+
+service SuiService {
+    rpc SubmitTransaction(SubmitTransactionRequest) returns (SubmitTransactionResponse) {}
+    rpc GetTransaction(GetTransactionRequest) returns (GetTransactionResponse) {}
+    rpc GetAccountBalance(GetAccountBalanceRequest) returns (GetAccountBalanceResponse) {}
+}
+
+message SubmitTransactionRequest {
+    string sender = 1;
+    string recipient = 2;
+    uint64 amount = 3;
+}
+
+message SubmitTransactionResponse {
+    string transaction_digest = 1;
+}
+
+message GetTransactionRequest {
+    string digest = 1;
+}
+
+message GetTransactionResponse {
+    string timestamp = 1;
+    string sender = 2;
+    uint64 total_gas = 3;
+}
+
+message GetAccountBalanceRequest {
+    string address = 1;
+}
+
+message GetAccountBalanceResponse {
+    uint64 balance = 1;
+}

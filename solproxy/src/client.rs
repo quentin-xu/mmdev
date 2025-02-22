@@ -1,6 +1,6 @@
 use solana_sdk::{pubkey::Pubkey, signature::*, system_instruction, transaction::Transaction};
 use solana_client::rpc_client::RpcClient;
-use solana_transaction_status::{UiTransactionEncoding, EncodedTransaction, UiTransaction};
+use solana_transaction_status::{UiTransactionEncoding, EncodedTransaction};
 use std::{str::FromStr, *};
 
 #[derive(Debug)]
@@ -13,6 +13,7 @@ impl fmt::Display for SolClientError {
         write!(f, "Validation error: {}", self.message)
     }
 }
+
 
 impl error::Error for SolClientError {}
 
@@ -28,6 +29,7 @@ impl fmt::Debug for SolClient {
             .finish()
     }
 }
+
 
 impl Default for SolClient {
     fn default() -> Self {
@@ -83,7 +85,7 @@ impl SolClient {
     pub fn get_transaction(
         &self,
         signature: &String,
-    ) -> Result<UiTransaction, SolClientError> {
+    ) -> Result<EncodedTransaction, SolClientError> {
         let signature = signature.parse().map_err(|_| {
             SolClientError { message: format!("Invalid transaction signature format")}
         })?;
@@ -93,14 +95,7 @@ impl SolClient {
                 SolClientError { message: format!("Failed to get transaction: {}", e)}
             )?;
 
-        match transaction.transaction.transaction {
-            EncodedTransaction::Json(tx) => {
-                return Ok(tx)
-            }
-            _ => {
-                return Err(SolClientError { message: format!("Invalid transaction format")})
-            }
-        }
+        return Ok(transaction.transaction.transaction)
     }
 }
 
